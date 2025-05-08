@@ -32,7 +32,7 @@ void FatalError(const char *fmt, ...)
 #ifdef _MSC_VER
 	MessageBox(NULL, t, "Fatal error", MB_OK);
 #else
-	fprintf(stderr, t);
+	fprintf(stderr, "%s", t);
 #endif
 	while (1)
 		exit(0);

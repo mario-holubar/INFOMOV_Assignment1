@@ -41,4 +41,4 @@ echo "Building CMake project"
 cmake --build build --config Release
 
 # Allow user to see output before closing the terminal
-read -p "Press any key to continue..."
+#read -p "Press any key to continue..."
