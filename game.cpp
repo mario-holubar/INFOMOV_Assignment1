@@ -155,7 +155,7 @@ void DrawWuLine( Surface *screen, int X0, int Y0, int X1, int Y1, uint clrLine )
             Weighting = ErrorAcc >> 8;
 			// Draw pixels
             BlendPixel(screen, X0, Y0, grayl, Weighting, rl, gl, bl);
-            BlendPixel(screen, X0 + XDir, Y0, grayl, Weighting, rl, gl, bl);
+            BlendPixel(screen, X0 + XDir, Y0, grayl, Weighting ^ 255, rl, gl, bl);
         }
         /* Draw the final pixel, which is always exactly intersected by the line
         and so needs no weighting */
@@ -181,7 +181,7 @@ void DrawWuLine( Surface *screen, int X0, int Y0, int X1, int Y1, uint clrLine )
         Weighting = ErrorAcc >> 8;
 		// Draw pixels
 		BlendPixel(screen, X0, Y0, grayl, Weighting, rl, gl, bl);
-		BlendPixel(screen, X0, Y0 + 1, grayl, Weighting, rl, gl, bl);
+		BlendPixel(screen, X0, Y0 + 1, grayl, Weighting ^ 255, rl, gl, bl);
     }
 
     /* Draw the final pixel, which is always exactly intersected by the line
