@@ -69,6 +69,10 @@ void UndoMutation( int i )
 	lc[i] = c_;
 }
 
+inline BYTE BlendChannel(BYTE a, BYTE b, BYTE w) {
+	return (a > b ? (((w * (a - b)) >> 8) + b) : (((w * (b - a)) >> 8) + a));
+}
+
 inline void BlendPixel(Surface *screen, int X0, int Y0, double grayl, unsigned short Weighting, BYTE rl, BYTE gl, BYTE bl) {
     COLORREF clrBackGround = screen->pixels[X0 + Y0 * SCRWIDTH];
     BYTE rb = GetRValue(clrBackGround);
@@ -77,9 +81,9 @@ inline void BlendPixel(Surface *screen, int X0, int Y0, double grayl, unsigned s
     double grayb = rb * 0.299 + gb * 0.587 + bb * 0.114;
     unsigned short w = grayl < grayb ? Weighting : (Weighting ^ 255);
 
-    BYTE rr = (rb > rl ? (((w * (rb - rl)) >> 8) + rl) : (((w * (rl - rb)) >> 8) + rb));
-    BYTE gr = (gb > gl ? (((w * (gb - gl)) >> 8) + gl) : (((w * (gl - gb)) >> 8) + gb));
-    BYTE br = (bb > bl ? (((w * (bb - bl)) >> 8) + bl) : (((w * (bl - bb)) >> 8) + bb));
+    BYTE rr = BlendChannel(rb, rl, w);
+    BYTE gr = BlendChannel(gb, gl, w);
+    BYTE br = BlendChannel(bb, bl, w);
     screen->Plot(X0, Y0, RGB(rr, gr, br));
 }
 
