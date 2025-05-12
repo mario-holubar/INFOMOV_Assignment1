@@ -80,11 +80,13 @@ inline void BlendPixel(Surface *screen, int X0, int Y0, double grayl, unsigned s
     BYTE bb = GetBValue(clrBackGround);
     double grayb = rb * 0.299 + gb * 0.587 + bb * 0.114;
     unsigned short w = grayl < grayb ? Weighting : (Weighting ^ 255);
-
+    // blend channels to obtain new color
     BYTE rr = BlendChannel(rb, rl, w);
     BYTE gr = BlendChannel(gb, gl, w);
     BYTE br = BlendChannel(bb, bl, w);
-    screen->Plot(X0, Y0, RGB(rr, gr, br));
+    uint color = RGB(rr, gr, br);
+    // write directly to screen, skipping bounds check (line points are guaranteed to always be in bounds)
+    screen->pixels[X0 + Y0 * screen->width] = color;
 }
 
 // -----------------------------------------------------------
@@ -136,8 +138,8 @@ void DrawWuLine( Surface *screen, int X0, int Y0, int X1, int Y1, uint clrLine )
     /* Is this an X-major or Y-major line? */
     if (DeltaY > DeltaX)
     {
-    /* Y-major line; calculate 16-bit fixed-point fractional part of a
-    pixel that X advances each time Y advances 1 pixel, truncating the
+        /* Y-major line; calculate 16-bit fixed-point fractional part of a
+        pixel that X advances each time Y advances 1 pixel, truncating the
         result so that we won't overrun the endpoint along the X axis */
         ErrorAdj = ((unsigned long) DeltaX << 16) / (unsigned long) DeltaY;
         /* Draw all pixels other than the first and last */
