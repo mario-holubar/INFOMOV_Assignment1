@@ -69,18 +69,18 @@ void UndoMutation( int i )
 	lc[i] = c_;
 }
 
-inline BYTE BlendChannel(BYTE a, BYTE b, unsigned short w) {
+inline BYTE BlendChannel(BYTE a, BYTE b, int w) {
 	if (a > b) std::swap(a, b);
 	return a + ((w * (b - a)) >> 8);
 }
 
-inline void BlendPixel(Surface *screen, int X0, int Y0, double grayl, unsigned short Weighting, BYTE rl, BYTE gl, BYTE bl) {
+inline void BlendPixel(Surface *screen, int X0, int Y0, double grayl, int Weighting, BYTE rl, BYTE gl, BYTE bl) {
     COLORREF clrBackGround = screen->pixels[X0 + Y0 * SCRWIDTH];
     BYTE rb = GetRValue(clrBackGround);
     BYTE gb = GetGValue(clrBackGround);
     BYTE bb = GetBValue(clrBackGround);
     double grayb = rb * 0.299 + gb * 0.587 + bb * 0.114;
-    unsigned short w = grayl < grayb ? Weighting : (Weighting ^ 255);
+    int w = grayl < grayb ? Weighting : (Weighting ^ 255);
     // blend channels to obtain new color
     BYTE rr = BlendChannel(rb, rl, w);
     BYTE gr = BlendChannel(gb, gl, w);
