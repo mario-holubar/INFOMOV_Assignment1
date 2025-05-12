@@ -69,8 +69,9 @@ void UndoMutation( int i )
 	lc[i] = c_;
 }
 
-inline BYTE BlendChannel(BYTE a, BYTE b, BYTE w) {
-	return (a > b ? (((w * (a - b)) >> 8) + b) : (((w * (b - a)) >> 8) + a));
+inline BYTE BlendChannel(BYTE a, BYTE b, unsigned short w) {
+	if (a > b) std::swap(a, b);
+	return a + ((w * (b - a)) >> 8);
 }
 
 inline void BlendPixel(Surface *screen, int X0, int Y0, double grayl, unsigned short Weighting, BYTE rl, BYTE gl, BYTE bl) {
