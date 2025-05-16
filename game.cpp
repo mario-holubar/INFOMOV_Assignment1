@@ -70,7 +70,11 @@ void UndoMutation( int i )
 }
 
 inline BYTE BlendChannel(BYTE a, BYTE b, int w) {
-	if (a > b) std::swap(a, b);
+	if (a > b) {
+		BYTE tmp = a;
+		a = b;
+		b = tmp;
+	}
 	return a + ((w * (b - a)) >> 8);
 }
 
